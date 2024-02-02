@@ -1,3 +1,4 @@
+
 # KDADZ
 
 ## Cooperation Plan
@@ -93,3 +94,23 @@ Describe at least:
 
 ### How you will identify tasks, assign tasks, know when they are complete, and manage work in general?
 ### What project management tool will be used?
+
+
+## Name of Project
+Trivia Trek
+
+## Summary of idea.
+Jeopardy game with rogue light capabilities in which an individual answers categorial based questions to receive points. They use those points to buy items in the shop for upgrades/perks. The player only has 5 lives to start off with and when they miss a question, they lose a heart. At 0 hp, the character dies and goes into oblivion. If the character gets enough points, they can enter a boss round. If they win, they escape into the virtual world of freedom. 
+
+## What problem or pain point does it solve? 
+This will be a fun interactive game that will solve the problem of user boredum
+
+## Minimum Viable Product (MVP) definition.
+- Jeopardy Game with rogue light capabilities
+- Title screen with menu(menu will have settings tab with sound)
+- Use ChatGPT API to generate questions
+- Shop people can spend points on
+- People have life points, can spend in game money to buy perks from shop such as a health potion
+- Final question boss round
+- Game intensity increase
+- 2D style
