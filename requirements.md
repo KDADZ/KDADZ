@@ -70,7 +70,7 @@ OUT - What will your product not do
 
 ### Data Flow
 
-![Insert Whiteboard here]()
+![Domain Model](./assets/img/Trivia_Trek_DOM.png)
 
 ### Non-Functional Requirements
 
