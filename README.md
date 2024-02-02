@@ -95,6 +95,19 @@ Describe at least:
 ### How you will identify tasks, assign tasks, know when they are complete, and manage work in general?
 ### What project management tool will be used?
 
+## Git Process
+Plan out what your team’s Git workflow looks like for coding tasks.
+
+Describe at least:
+
+### What components of your project will live on GitHub?
+### How will you share the repository with your teammates?
+### What is your Git flow?
+### Will you be using a PR review workflow? If so, consider:
+### How many people must review a PR?
+### Who merges PRs?
+### How often will you merge?
+### How will you communicate that it’s time to merge?
 
 ## Name of Project
 Trivia Trek
