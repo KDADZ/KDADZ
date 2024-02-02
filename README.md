@@ -1,5 +1,4 @@
-
-# KDADZ
+# Trivia Trek
 
 ## Cooperation Plan
 
@@ -65,60 +64,75 @@ Meet in remo every day and maintaining communication through slack.
     - F.U.N. F is for friends who do things together, U is for you and me. N is for anywhere and anytime at all down here at Code Fellows.
     
 ### What will your team do if one person is taking over the project and not letting the other members contribute?
-    - 
+    - We will communicate with the person what they are doing and talk it out. Take it to court.
 
 ### How will you approach each other and the challenges of the project knowing that it is impossible for all members to be at the exact same place in understanding and skill level?
+    - We will delegate tasks based off of people's strengths and weaknesses so that people will have equal time improving their skills in every area.
+
 ### How will you raise concerns to members who are not adequately contributing?
+    - We will communicate with the person what they are doing and talk it out. Take it to court. And utilize the project management app.
+
 ### How and when will you escalate the conflict if your resolution attempts are unsuccessful?
+    - Have an intervention. Involve the instructor.
 
-##Communication Plan
-Before beginning to tackle the project, determine how your group will communicate with each other. This is not an individual effort. Make sure everyone feels comfortable with the identified methods of speaking up.
-
-Describe at least:
+## Communication Plan
 
 ### What hours will you be available to communicate?
-### What platforms will you use to communicate (ie. Slack, phone …)?
-### How often will you take breaks?
-### What is your plan if you start to fall behind?
-### How will you communicate after hours and on the weekend?
-### What is your strategy for ensuring everyone’s voice is heard?
-### How will you ensure that you are creating a safe environment where everyone feels comfortable speaking up?
+    - Kaitlin: 11am - 8pm cst
+    - DeAndre: 12pm - 9pm est
+    - Zach: 11am - 8pm cst
+    - Armando: 9am - 9pm pst
+    - Domonique: Anytime
 
+### What platforms will you use to communicate (ie. Slack, phone …)?
+    - Slack
+    - Remo
+    - Trello
+    
+### How often will you take breaks?
+    - Once every 2 hours
+
+### What is your plan if you start to fall behind?
+    - We will re-evaluate our MVP
+
+### How will you communicate after hours and on the weekend?
+    - Slack
+    
+### What is your strategy for ensuring everyone’s voice is heard?
+    - Open door policy, maintaining respect, and democracy
+
+### How will you ensure that you are creating a safe environment where everyone feels comfortable speaking up?
+    - We will maintain openness, respect for each other, and an open-door policy
 
 ## Work Plan
-Explain your work plan to track whether everyone is contributing equally to all parts of the project, and that each person is working on “meaty” problems. This should prevent “lone wolf” efforts and “siloed” efforts.
-
-NOTE: While researching and experimentation is always encouraged, writing and/or committing code to the project on your own during non-working hours or over the weekend is never acceptable. This puts the entire project at risk. Be explicit in calling out your work hours and the distribution of tasks.
-
-Describe at least:
 
 ### How you will identify tasks, assign tasks, know when they are complete, and manage work in general?
+    - We will use a project management tool.
+
 ### What project management tool will be used?
+    - We will use Trello
 
 ## Git Process
-Plan out what your team’s Git workflow looks like for coding tasks.
-
-Describe at least:
 
 ### What components of your project will live on GitHub?
+    - All of them save for the database.
+
 ### How will you share the repository with your teammates?
+    - We will create an organization on GitHub
+
 ### What is your Git flow?
+    - We will have a dev fork that we will merge any off branches with and merge the dev fork back into main when everything is done.
+
 ### Will you be using a PR review workflow? If so, consider:
-### How many people must review a PR?
-### Who merges PRs?
-### How often will you merge?
-### How will you communicate that it’s time to merge?
+    - We will require two reviews and approvals from other teammates for a pull request.
 
-## Name of Project
-Trivia Trek
-
-## Summary of idea.
+### Summary of idea.
 Jeopardy game with rogue light capabilities in which an individual answers categorial based questions to receive points. They use those points to buy items in the shop for upgrades/perks. The player only has 5 lives to start off with and when they miss a question, they lose a heart. At 0 hp, the character dies and goes into oblivion. If the character gets enough points, they can enter a boss round. If they win, they escape into the virtual world of freedom. 
 
-## What problem or pain point does it solve? 
+### What problem or pain point does it solve? 
 This will be a fun interactive game that will solve the problem of user boredum
 
-## Minimum Viable Product (MVP) definition.
+### Minimum Viable Product (MVP) definition.
 - Jeopardy Game with rogue light capabilities
 - Title screen with menu(menu will have settings tab with sound)
 - Use ChatGPT API to generate questions
