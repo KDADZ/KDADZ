@@ -8,7 +8,7 @@ As a __, I want __, so that ___
 4. As a full time parent, I want to a game to keep my kids busy, so that I don't have to parent.
 5. As a student, I want to learn how to make a simple game using pygame, so that I can add it to my REPERTOIRE of coding skills.
 
-### Vision
+## Vision
 
 What is the vision of this product?
 
