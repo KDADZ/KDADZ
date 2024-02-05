@@ -9,56 +9,59 @@ pygame.display.set_caption("Game Menu")
 
 black = (0, 0, 0)
 white = (255, 255, 255)
-blue = (0, 0, 255)
+blue = (0, 0, 255) 
 
-font = pygame.font.Font(None, 36)
+background_image = pygame.image.load('background.jpg').convert_alpha()
 
-background_image = pygame.image.load('background.jpg').convert()
-
-def draw_menu():
-    screen.blit(background_image, [0, 0])
-
-    draw_text("Trivia Trek", font, black, screen, 20, 20)
-    draw_button("Start", 100, 200, 100, 50, white, blue, action=start_game)
-    draw_button("Options", 100, 275, 100, 50, white, blue, action=options_game)
-    draw_button("Quit", 100, 350, 100, 50, white, blue, action=quit_game)
-
-
-
-def draw_text(text, font, color, surface, x, y):
-    textobj = font.render(text, 1, color)
-    textrect = textobj.get_rect()
-    textrect.topleft = (x, y)
-    surface.blit(textobj, textrect)
-
-def options_game():
-    print("Options selected...") 
-
-def draw_button(text, x, y, width, height, text_color, button_color, action=None):
-    mouse = pygame.mouse.get_pos()
-    click = pygame.mouse.get_pressed()
-    if x + width > mouse[0] > x and y + height > mouse[1] > y:
-        pygame.draw.rect(screen, button_color, (x, y, width, height))
-        if click[0] == 1 and action != None:
-            action() 
-    else:
-        pygame.draw.rect(screen, text_color, (x, y, width, height))
-
-    draw_text(text, font, black, screen, x + 10, y + 10)
+font = pygame.font.Font(None, 50)
+title_font = pygame.font.Font(None, 80) 
 
 def start_game():
-    print("Starting game...") 
+    print("Starting game...")
+
+def options_game():
+    print("Options menu...")
 
 def quit_game():
     pygame.quit()
     sys.exit()
 
+buttons = {
+    "Start": {"rect": pygame.Rect(screen_width // 2 - 100, 200, 200, 50), "action": start_game},
+    "Options": {"rect": pygame.Rect(screen_width // 2 - 100, 275, 200, 50), "action": options_game},
+    "Quit": {"rect": pygame.Rect(screen_width // 2 - 100, 350, 200, 50), "action": quit_game}
+}
+
+def draw_button(text, rect, active):
+    text_color = blue if active else black 
+    draw_text(text, font, text_color, screen, rect.centerx, rect.centery)
+
+
+def draw_text(text, font, color, surface, x, y):
+    textobj = font.render(text, True, color)
+    textrect = textobj.get_rect(center=(x, y))
+    surface.blit(textobj, textrect)
+
+def draw_menu(mouse_pos):
+    screen.blit(background_image, (0, 0))
+
+    draw_text("Trivia Trek", title_font, black, screen, screen_width // 2, 60)
+
+    for text, button_data in buttons.items():
+        draw_button(text, button_data["rect"], button_data["rect"].collidepoint(mouse_pos))
+
 running = True
 while running:
+    mouse_pos = pygame.mouse.get_pos()
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
-    
-    draw_menu()
+        elif event.type == pygame.MOUSEBUTTONDOWN:
+            if event.button == 1:
+                for button_text, button_data in buttons.items():
+                    if button_data["rect"].collidepoint(mouse_pos):
+                        button_data["action"]()
+
+    draw_menu(mouse_pos)
 
     pygame.display.update()
