@@ -1,18 +1,23 @@
 from inventory import Inventory
 import pygame
+import math
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self, hp, money):
+    def __init__(self, hp, money, position=(100, 100)):
         super().__init__()
         self.hp = hp
         self.money = money
         self.inventory = Inventory()
         self.points = 0
         
-        # self.original_image = pygame.image.load()
-        # self.image = self.original_image
-        # self.rect = self.image.get_rect()
-        # self.rect.topleft = (100, screen_height - self.rect.height)
+        self.image = pygame.image.load("assets\img\Stickman4.png").convert_alpha()
+        self.rect = self.image.get_rect(topleft=position)
+        
+        self.base_y = position[1]  # Base Y position for hover effect
+        self.hover_amplitude = 5  # How much the sprite moves up and down
+        self.hover_frequency = 2  # Speed of the hover effect
+        self.t = 0  # Time variable for the hover effect
+        self.hover_enabled = False
 
 
     def add_money(self, amount):
@@ -56,4 +61,14 @@ class Player(pygame.sprite.Sprite):
             if event.key == pygame.K_UP or event.key == pygame.K_DOWN:
                 self.velocity[1] = 0
     
+    def update(self, *args):
+        
+            if self.hover_enabled:
+                self.t += 0.05
+                self.rect.y = self.base_y + self.hover_amplitude * math.sin(self.hover_frequency * self.t)
+            else:
+                self.rect.y = self.base_y
+                self.t = 0
             
+    def toggle_hover(self):
+        self.hover_enabled = not self.hover_enabled
