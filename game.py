@@ -2,17 +2,19 @@ import pygame
 from player import Player
 from items import red_potion
 from trivia_room import TriviaRoom
+from gamestate import GameState
+from menu import Menu
 
 class Game:
     def __init__(self):
         pygame.init()
-        self.screen_width = 800
-        self.screen_height = 600
-        self.screen = pygame.display.set_mode((self.screen_width, self.screen_height))
+        self.screen = pygame.display.set_mode((800, 600))
         pygame.display.set_caption("Trivia Roguelite Game")
 
         self.clock = pygame.time.Clock()
         self.running = True
+        self.current_state = GameState.MENU
+        self.menu = Menu(self)
 
         self.player = Player(10, 100)
         self.player.add_item(red_potion, 1)
@@ -28,32 +30,56 @@ class Game:
         pygame.quit()
 
     def handle_events(self):
-        for event in pygame.event.get():
+        events = pygame.event.get()
+        for event in events:
             if event.type == pygame.QUIT:
                 self.running = False
-            # Add more event handling here (e.g., key presses, mouse clicks)
+        if self.current_state == GameState.MENU:
+            self.menu.handle_events(events)
+            self.menu.draw(pygame.mouse.get_pos())
 
     def update(self):
-        # Update game state, player, and other components
-        pass
+        if self.current_state == GameState.MID_LEVEL:
+            # Update logic for mid-level
+            pass
+        elif self.current_state == GameState.TRIVIA_ROOM:
+            # Update logic for trivia room
+            pass
 
     def render(self):
-        self.screen.fill((0, 50, 50))  # Clear the screen with black
-        # Add rendering code here (draw player, items, UI elements)
-        pygame.display.flip()  # Update the full display Surface to the screen
+        if self.current_state == GameState.MENU:
+            mouse_pos = pygame.mouse.get_pos()
+            self.menu.draw(mouse_pos)
+            pass
+        elif self.current_state == GameState.TRIVIA_ROOM:
+            # Rendering for trivia room
+            pass
+        pygame.display.flip()
         
     def trivia_room(self, selected_category):
-        
         if not trivia_room_instance:
             trivia_room_instance = TriviaRoom(game, selected_category)
         else:
             trivia_room_instance.category = selected_category
             trivia_room_instance.load_new_question()
+            
+    def transition_state(self, new_state):
+        self.current_state = new_state
+        # Handle any setup needed for the new state
+        if new_state == GameState.TRIVIA_ROOM:
+            # Example: set up player position for trivia room
+            self.player.transition_to_state("trivia_room", new_position=(100, 500))  # Just an example
+        elif new_state == GameState.MID_LEVEL:
+            # Setup for returning to mid-level
+            self.player.transition_to_state("mid_level")
         
     def allow_redo(self):
         pass
     
     def skip_round(self):
+        pass
+    
+    def trivia_room_logic():
         pass
 
 game = Game()
