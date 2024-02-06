@@ -4,6 +4,7 @@ from items import red_potion
 from trivia_room import TriviaRoom
 from gamestate import GameState
 from menu import Menu
+from lose_screen import LoseScreen
 
 class Game:
     def __init__(self):
@@ -20,6 +21,8 @@ class Game:
         self.player.add_item(red_potion, 1)
         self.trivia_room_instance = None
 
+        self.lose_screen = LoseScreen(self.screen)
+    
     def run(self):
         while self.running:
             self.handle_events()
@@ -34,9 +37,15 @@ class Game:
         for event in events:
             if event.type == pygame.QUIT:
                 self.running = False
-        if self.current_state == GameState.MENU:
-            self.menu.handle_events(events)
-            self.menu.draw(pygame.mouse.get_pos())
+            # Simulation for lose screen
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_l:  # Press 'L' key to simulate losing
+                    self.transition_state(GameState.LOSE)
+
+            if self.current_state == GameState.MENU:
+                self.menu.handle_events(events)
+            elif self.current_state == GameState.LOSE:
+                self.lose_screen.handle_event(event, self.transition_state)
 
     def update(self):
         if self.current_state == GameState.MID_LEVEL:
@@ -44,6 +53,9 @@ class Game:
             pass
         elif self.current_state == GameState.TRIVIA_ROOM:
             # Update logic for trivia room
+            pass
+        if self.current_state == GameState.LOSE:
+        # Update logic for lose screen if needed
             pass
 
     def render(self):
@@ -54,6 +66,10 @@ class Game:
         elif self.current_state == GameState.TRIVIA_ROOM:
             # Rendering for trivia room
             pass
+        elif self.current_state == GameState.LOSE:
+            mouse_pos = pygame.mouse.get_pos()
+            self.lose_screen.draw(mouse_pos)
+
         pygame.display.flip()
         
     def trivia_room(self, selected_category):
@@ -72,6 +88,15 @@ class Game:
         elif new_state == GameState.MID_LEVEL:
             # Setup for returning to mid-level
             self.player.transition_to_state("mid_level")
+        elif new_state == GameState.MENU:
+        # If specific setup is required when returning to the menu, do it here
+        # For example, reset game progress, scores, etc., if the game starts anew from the menu
+            pass
+        elif new_state == GameState.LOSE:
+        # If there's any specific setup when entering the lose screen, do it here
+        # Often there might not be much to do except showing the lose screen
+            pass
+
         
     def allow_redo(self):
         pass
