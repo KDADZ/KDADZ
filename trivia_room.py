@@ -89,3 +89,4 @@ if __name__ == "__main__":
     category = "general knowledge"  # Example category
     game = TriviaGame(category)
     game.run()
+    
