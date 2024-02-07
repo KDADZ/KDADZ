@@ -12,7 +12,7 @@ class Menu:
         self.screen_width, self.screen_height = self.screen.get_size()
         self.current_state = 'main_menu'
         
-        self.background_image = pygame.image.load('background.jpg').convert_alpha()
+        self.background_image = pygame.image.load('assets/img/background.jpg').convert_alpha()
         self.font = pygame.font.Font(None, 50)
         self.title_font = pygame.font.Font(None, 80)
         
