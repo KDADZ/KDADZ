@@ -10,7 +10,7 @@ class LoseScreen:
         self.quit_rect = pygame.Rect(300, 500, 200, 50)
         self.button_color = (255, 255, 255)
         self.button_hover_color = (200, 200, 200)
-        self.skull_image = pygame.image.load('skull.jpg')  
+        self.skull_image = pygame.image.load('assets/img/skull.jpg')  
         desired_height = self.screen.get_height() * 0.4  
         aspect_ratio = self.skull_image.get_width() / self.skull_image.get_height()
         desired_width = int(desired_height * aspect_ratio)
