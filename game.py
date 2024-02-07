@@ -116,6 +116,10 @@ class Game:
         elif new_state == GameState.VICTORY:
             pygame.mixer.music.load('assets\Music\victory_screen.mp3')
             pygame.mixer.music.play(-1)
+            
+        elif new_state == GameState.SHOPKEEPER:
+            pygame.mixer.music.load('assets\Music\shop_menu.mp3')
+            pygame.mixer.music.play(-1)
         
     def allow_redo(self):
         pass
