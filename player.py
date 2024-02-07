@@ -6,7 +6,7 @@ class Player(pygame.sprite.Sprite):
     def __init__(self, hp, money, position=(100, 100)):
         super().__init__()
         self.hp = hp
-        self.max_hp = 5
+        self.max_hp = hp
         self.money = money
         self.inventory = Inventory()
         self.points = 0
@@ -31,11 +31,11 @@ class Player(pygame.sprite.Sprite):
         points = points / 2
         self.points -= points
 
-    def take_damage(self, damage):
+    def take_damage(self, damage=1):
         self.hp -= damage
         self.hp = max(self.hp, 0)
 
-    def heal(self, amount):
+    def heal(self, amount=1):
         self.hp += amount
         self.hp = min(self.hp, 5)
 

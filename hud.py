@@ -1,28 +1,4 @@
 import pygame
-import sys
-
-class Player:
-    def __init__(self):
-        self.hp = 4
-        self.max_hp = 5
-        self.money = 100
-
-class Game:
-    def __init__(self):
-        self.screen = pygame.display.set_mode((1080, 720))
-        self.player = Player()
-        self.current_level = 1
-        self.running = True
-
-    def run(self):
-        while self.running:
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    self.running = False
-            self.screen.fill((0, 0, 0))
-            hud.draw()
-            pygame.display.flip()
-
 
 class HUD:
     def __init__(self, game):
@@ -70,12 +46,3 @@ class HUD:
     def draw_text(self, text, x, y):
         text_surface = self.font.render(text, True, (255, 255, 255))
         self.screen.blit(text_surface, (x, y))
-
-if __name__ == "__main__":
-    pygame.init()
-    pygame.display.set_caption("HUD Test")
-    game = Game()
-    hud = HUD(game)
-    game.run()
-    pygame.quit()
-    sys.exit()
