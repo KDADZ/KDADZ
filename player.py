@@ -6,6 +6,7 @@ class Player(pygame.sprite.Sprite):
     def __init__(self, hp, money, position=(100, 100)):
         super().__init__()
         self.hp = hp
+        self.max_hp = 5
         self.money = money
         self.inventory = Inventory()
         self.points = 0
