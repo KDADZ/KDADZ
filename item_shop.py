@@ -13,10 +13,8 @@ class ItemShop:
         }
 
     def draw(self):
-        # Draw the background image
         self.screen.blit(self.background_img, (0, 0))
         
-        # Draw player's points
         points_surface = self.font.render(f"Points: {self.player.points}", True, (255, 255, 255))
         self.screen.blit(points_surface, (10, 10))
 
@@ -36,4 +34,3 @@ class ItemShop:
         else:
             print("Not enough points for this item")
 
-    # You could add additional methods as needed for your game logic
