@@ -92,22 +92,33 @@ class Game:
             
     def transition_state(self, new_state):
         self.current_state = new_state
-        # Handle any setup needed for the new state
+        pygame.mixer.music.stop()
+        
         if new_state == GameState.TRIVIA_ROOM:
-            # Example: set up player position for trivia room
-            self.player.transition_to_state("trivia_room", new_position=(100, 500))  # Just an example
-        elif new_state == GameState.MID_LEVEL:
-            self.current_state = new_state
-            # self.player.transition_to_state("mid_level")
-        elif new_state == GameState.MENU:
-        # If specific setup is required when returning to the menu, do it here
-        # For example, reset game progress, scores, etc., if the game starts anew from the menu
-            pass
-        elif new_state == GameState.LOSE:
-        # If there's any specific setup when entering the lose screen, do it here
-        # Often there might not be much to do except showing the lose screen
-            pass
+        # Load and play background music for the trivia room
+            pygame.mixer.music.load('assets\Music\trivia_room.mp3')
+            pygame.mixer.music.play(-1)  # Loop the music
+            
+            self.player.transition_to_state("trivia_room", new_position=(100, 500))
 
+        elif new_state == GameState.MID_LEVEL:
+            # Load and play background music for the mid-level
+            pygame.mixer.music.load('assets\Music\Mid_Level.mp3')
+            pygame.mixer.music.play(-1)  # Loop the music
+
+        elif new_state == GameState.MENU:
+            # Load and play background music for the menu
+            pygame.mixer.music.load('assets\Music\main_menu.mp3')
+            pygame.mixer.music.play(-1)  # Loop the music
+
+        elif new_state == GameState.LOSE:
+            # Load and play background music for the lose screen
+            pygame.mixer.music.load('assets\Music\lose_screen.mp3')
+            pygame.mixer.music.play(-1)  # Loop the music
+
+        elif new_state == GameState.VICTORY:
+            pygame.mixer.music.load('assets\Music\victory_screen.mp3')
+            pygame.mixer.music.play(-1)
         
     def allow_redo(self):
         pass
