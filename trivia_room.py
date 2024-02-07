@@ -2,11 +2,14 @@ import pygame
 import sys
 from OpenAI.Question_generator import generate_and_extract_trivia_details
 import random
+from gamestate import GameState
+from midplayer import MidLevel
 
 pygame.init()
 
 class TriviaGame:
-    def __init__(self, category):
+    def __init__(self, category, game = None,):
+        self.game = game
         self.screen = pygame.display.set_mode((800, 600))
         self.clock = pygame.time.Clock()
         self.category = category
@@ -16,6 +19,8 @@ class TriviaGame:
         self.correct_answer = ""
         self.background = pygame.image.load('assets/img/Trivia-Room.webp')  # Fixed path
         self.background = pygame.transform.scale(self.background, (800, 600))
+        self.question_count = 0  
+        self.max_questions = 3 
         self.load_new_question()
 
     def load_new_question(self):
@@ -65,7 +70,8 @@ class TriviaGame:
                 self.process_answer_selection(event.pos)
 
     def process_answer_selection(self, mouse_pos):
-        answer_boxes = self.get_answer_boxes()
+        font = pygame.font.Font(None, 36)  # Match the font size with render_answers
+        answer_boxes = self.get_answer_boxes(font)
         for key, box in answer_boxes.items():
             if box.collidepoint(mouse_pos):
                 if key == self.correct_answer:
@@ -74,6 +80,14 @@ class TriviaGame:
                 else:
                     print("Incorrect answer selected!")
                     self.points -= 10
+
+                self.question_count += 1  # Increment the question count here
+                
+                if self.question_count >= self.max_questions:
+                    if self.game:
+                        self.game.transition_state(GameState.MID_LEVEL)
+                    return
+
                 self.load_new_question()
 
     def get_answer_boxes(self, font):
@@ -128,7 +142,7 @@ class TriviaGame:
             x += answer_surface.get_width() + 20  # Add spacing between answers
 
     def process_answer_selection(self, mouse_pos):
-        font = pygame.font.Font(None, 36)  # Ensure this matches the font used in render_answers
+        font = pygame.font.Font(None, 36)  
         answer_boxes = self.get_answer_boxes(font)
         for key, box in answer_boxes.items():
             if box.collidepoint(mouse_pos):
@@ -138,8 +152,17 @@ class TriviaGame:
                 else:
                     print("Incorrect answer selected!")
                     self.points -= 10
-                self.load_new_question()  # Reload question and answers
-                break  
+
+                self.question_count += 1  
+                
+                if self.question_count >= self.max_questions:
+                    if self.game is not None:
+                        self.game.transition_state(GameState.MID_LEVEL) 
+                    else:
+                        print("Would transition to MidLevel state here.")  
+                    return  
+
+                self.load_new_question()
 
     def render(self):
         self.screen.blit(self.background, (0, 0))  # Draw the background image
