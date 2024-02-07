@@ -5,6 +5,6 @@ class Item:
         self.description = description
 
 red_potion = Item("Health Potion", 500, "Restores health")
-redo_card = Item("Redo Question Card", 800, "Allows redoing a question")
+redo_potion = Item("Redo Potion", 800, "Allows redoing a question")
 magic_sock = Item("Magic Sock", 1500, "Ends the game with a win")
 
