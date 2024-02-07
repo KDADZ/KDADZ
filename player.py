@@ -33,7 +33,8 @@ class Player(pygame.sprite.Sprite):
 
     def take_damage(self, damage=1):
         self.hp -= damage
-        self.hp = max(self.hp, 0)
+        if self.hp <= 0:
+            pass
 
     def heal(self, amount=1):
         self.hp += amount

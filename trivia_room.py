@@ -3,24 +3,20 @@ import sys
 from OpenAI.Question_generator import generate_and_extract_trivia_details
 import random
 from gamestate import GameState
-from midplayer import MidLevel
-
-pygame.init()
 
 class TriviaGame:
-    def __init__(self, category, game = None,):
+    def __init__(self, category, game = None, screen=None):
         self.game = game
-        self.screen = pygame.display.set_mode((800, 600))
-        self.clock = pygame.time.Clock()
         self.category = category
-        self.points = 0  # Player points
+        self.screen = screen
+        self.points = 0
         self.current_question = None
         self.answers = {}
         self.correct_answer = ""
-        self.background = pygame.image.load('assets/img/Trivia-Room.webp')  # Fixed path
+        self.background = pygame.image.load('assets/img/Trivia-Room.webp')
         self.background = pygame.transform.scale(self.background, (800, 600))
-        self.question_count = 0  
-        self.max_questions = 3 
+        self.question_count = 0
+        self.max_questions = 3
         self.load_new_question()
 
     def load_new_question(self):
@@ -61,8 +57,8 @@ class TriviaGame:
         lines.append(current_line)  # Add the last line
         return lines
 
-    def handle_events(self):
-        for event in pygame.event.get():
+    def handle_events(self, events):
+        for event in events:
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
@@ -150,6 +146,8 @@ class TriviaGame:
                     print("Correct answer selected!")
                     self.points += 10
                 else:
+                    damage = 1
+                    self.game.player.take_damage(damage)
                     print("Incorrect answer selected!")
                     self.points -= 10
 
@@ -173,16 +171,6 @@ class TriviaGame:
         self.render_answers(font)  # Draw the answers horizontally at the bottom
 
         pygame.display.flip()  # Update the display
-
-
-    def run(self):
-        while True:
-            self.handle_events()
-            self.render()
-            self.clock.tick(60)
-
-if __name__ == "__main__":
-    category = "general knowledge"
-    game = TriviaGame(category)
-    game.run()
-    
+        
+    def update(self):
+        pass
