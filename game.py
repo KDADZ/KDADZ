@@ -21,8 +21,8 @@ class Game:
         self.hud = HUD(self)
         self.mid_level = MidLevel(self)
 
-        self.player = Player(5, 100)
-        self.player.add_item(red_potion, 1)
+        self.player = Player(5, 100)  # Assuming Player initialization is correct
+        self.player.add_item(red_potion, 1)  # Ensure red_potion is correctly imported
         self.trivia_room_instance = None
         self.current_level = 1
 
@@ -42,30 +42,27 @@ class Game:
         for event in events:
             if event.type == pygame.QUIT:
                 self.running = False
-            # Simulation for lose screen
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_l:  # Press 'L' key to simulate losing
                     self.transition_state(GameState.LOSE)
-
             if self.current_state == GameState.MENU:
                 self.menu.handle_events(events)
             elif self.current_state == GameState.MID_LEVEL:
                 self.mid_level.handle_events(events)
+            elif self.current_state == GameState.TRIVIA_ROOM and self.trivia_room_instance:
+                self.trivia_room_instance.handle_events(events)
             elif self.current_state == GameState.LOSE:
                 self.lose_screen.handle_event(event, self.transition_state)
 
     def update(self):
         if self.current_state == GameState.MID_LEVEL:
             self.mid_level.update()
-        elif self.current_state == GameState.TRIVIA_ROOM:
-            # Update logic for trivia room
-            pass
-        if self.current_state == GameState.LOSE:
-            # Update logic for lose screen if needed
-            pass
+        elif self.current_state == GameState.TRIVIA_ROOM and self.trivia_room_instance:
+            self.trivia_room_instance.update()
+        elif self.current_state == GameState.LOSE:
+            pass  # Update logic for lose screen if needed
 
     def render(self):
-        
         self.screen.fill((0, 0, 0))
         
         if self.current_state == GameState.MENU:
@@ -73,29 +70,30 @@ class Game:
             self.menu.draw(mouse_pos)
         elif self.current_state == GameState.MID_LEVEL:
             self.mid_level.draw()
-        elif self.current_state == GameState.TRIVIA_ROOM:
-            pass
+        elif self.current_state == GameState.TRIVIA_ROOM and self.trivia_room_instance:
+            self.trivia_room_instance.render()
         elif self.current_state == GameState.LOSE:
             mouse_pos = pygame.mouse.get_pos()
             self.lose_screen.draw(mouse_pos)
             
         if self.current_state in [GameState.MID_LEVEL, GameState.TRIVIA_ROOM]:
-                    self.hud.draw()
+            self.hud.draw()
         pygame.display.flip()
         
     def trivia_room(self, selected_category):
-        if not trivia_room_instance:
-            trivia_room_instance = TriviaGame(game, selected_category)
+        if self.trivia_room_instance is None:
+            self.trivia_room_instance = TriviaGame(selected_category, self, self.screen)
         else:
-            trivia_room_instance.category = selected_category
-            trivia_room_instance.load_new_question()
+            self.trivia_room_instance.category = selected_category
+            self.trivia_room_instance.load_new_question()
+        self.transition_state(GameState.TRIVIA_ROOM)
+
             
     def transition_state(self, new_state):
         self.current_state = new_state
         # Handle any setup needed for the new state
         if new_state == GameState.TRIVIA_ROOM:
-            # Example: set up player position for trivia room
-            self.player.transition_to_state("trivia_room", new_position=(100, 500))  # Just an example
+            self.current_state = new_state
         elif new_state == GameState.MID_LEVEL:
             self.current_state = new_state
             # self.player.transition_to_state("mid_level")
@@ -117,6 +115,3 @@ class Game:
     
     def trivia_room_logic():
         pass
-
-game = Game()
-
