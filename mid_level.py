@@ -21,7 +21,7 @@ shop_portal_image = pygame.image.load('assets/img/portal2.png').convert_alpha()
 shop_portal_image = pygame.transform.scale(shop_portal_image, (50, 50))
 
 # Load stick figure image
-stick_figure_image = pygame.image.load('assets/img/stickman.png').convert_alpha()
+stick_figure_image = pygame.image.load('assets/img/cropstickman.png').convert_alpha()
 stick_figure_image = pygame.transform.scale(stick_figure_image, (50, 100))
 
 # Ensure stick figure is scaled to fit above the portals
