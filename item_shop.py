@@ -1,4 +1,5 @@
 import pygame
+from gamestate import GameState
 
 class ItemShop:
     def __init__(self, screen, player):
@@ -11,6 +12,12 @@ class ItemShop:
             'Magic Sock': {'cost': 1500, 'description': 'Ends the game with a win', 'rect': pygame.Rect(300, 168, 170, 207)},
             'Redo Potion': {'cost': 800, 'description': 'Allows redoing a question', 'rect': pygame.Rect(503, 168, 173, 185)}
         }
+        
+        self.back_hitboxes = [
+            pygame.Rect(330, 425, 141, 51),
+            pygame.Rect(349, 507, 103, 45)
+        ]
+        
         self.notification_msg = ""
         self.notification_time = 0
         self.notification_duration = 3  # seconds
@@ -41,12 +48,20 @@ class ItemShop:
             self.screen.blit(background_surface, notification_rect.topleft)
             self.screen.blit(notification_surface, notification_rect.topleft)
 
-    def handle_event(self, event):
-        if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:  
+    def handle_event(self, event, transition_state_callback):
+        
+        if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
             mouse_pos = pygame.mouse.get_pos()
+
+            for hitbox in self.back_hitboxes:
+                if hitbox.collidepoint(mouse_pos):
+                    transition_state_callback(GameState.MID_LEVEL)
+                    return
+
             for item_name, item_details in self.items.items():
                 if item_details['rect'].collidepoint(mouse_pos):
                     self.attempt_purchase(item_name)
+
 
     def attempt_purchase(self, item_name):
         item = self.items[item_name]

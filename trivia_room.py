@@ -34,12 +34,15 @@ class TriviaGame:
             all_answers = [right_answer] + wrong_answers if right_answer and wrong_answers else []
             random.shuffle(all_answers)
             self.answers = {chr(97 + i): answer for i, answer in enumerate(all_answers) if answer}
-            self.correct_answer = [key for key, value in self.answers.items() if value == right_answer][0]
+
+            self.correct_answer = next((key for key, value in self.answers.items() if value == right_answer), None)
+            if self.correct_answer is None:
+                print("Error: Correct answer not found among the provided answers.")
+                continue
             if self.current_question and len(all_answers) >= 4:
                 valid_question = True
             else:
                 self.selection_result = None
-
 
     def wrap_text(self, text, font, max_width):
         words = text.split(' ')

@@ -53,7 +53,7 @@ class Game:
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_l:  # Press 'L' key to simulate losing
                     self.transition_state(GameState.LOSE)
-                elif event.key == pygame.K_s:  # Press 'S' key to go to the shop
+                elif event.key == pygame.K_s and self.current_state == GameState.MID_LEVEL:  # Ensure we're in MID_LEVEL
                     self.transition_state(GameState.SHOP)
                 elif event.key == pygame.K_m:  # Press 'M' key to return to mid-level screen
                     self.transition_state(GameState.MID_LEVEL)
@@ -70,7 +70,7 @@ class Game:
             elif self.current_state == GameState.LOSE:
                 self.lose_screen.handle_event(event, self.transition_state)
             elif self.current_state == GameState.SHOP:
-                self.item_shop.handle_event(event)
+                self.item_shop.handle_event(event, self.transition_state)
             elif self.current_state == GameState.VICTORY:
                 self.victory_screen.handle_event(event)
 
@@ -131,7 +131,8 @@ class Game:
             # self.player.inventory.clear()
             self.player.add_item(red_potion, 1)  # Give initial items back, adjust as needed
             self.current_level = 1
-
+            self.trivia_room_instance = None
+            
     def open_victory_screen(self):
         self.transition_state(GameState.VICTORY)
 
@@ -146,8 +147,8 @@ class Game:
         if new_state == GameState.TRIVIA_ROOM:
             self.current_state = new_state
         # Load and play background music for the trivia room
-            # pygame.mixer.music.load('assets\Music\\trivia_room.mp3')
-            # pygame.mixer.music.play(-1)  # Loop the music
+            pygame.mixer.music.load('assets\Music\\trivia_room.mp3')
+            pygame.mixer.music.play(-1)  # Loop the music
         elif new_state == GameState.MID_LEVEL:
             # Load and play background music for the mid-level
             pygame.mixer.music.load('assets\Music\Mid_Level.mp3')
