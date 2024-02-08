@@ -16,6 +16,7 @@ class LoseScreen:
         desired_width = int(desired_height * aspect_ratio)
         self.skull_image = pygame.transform.scale(self.skull_image, (desired_width, desired_height))
         
+        
         # Vertical position of skull
         vertical_position = self.screen.get_height() // 2 - desired_height // 2 - -90  
         self.skull_rect = self.skull_image.get_rect(center=(self.screen.get_width() // 2, vertical_position))
