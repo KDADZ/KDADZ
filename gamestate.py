@@ -9,3 +9,4 @@ class GameState(enum.Enum):
     WIN = 5
     LOSE = 6
     VICTORY = 7
+    SHOP = 8

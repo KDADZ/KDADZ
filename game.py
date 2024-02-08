@@ -7,6 +7,7 @@ from menu import Menu
 from lose_screen import LoseScreen
 from hud import HUD
 from midplayer import MidLevel
+from item_shop import ItemShop
 
 class Game:
     def __init__(self):
@@ -28,6 +29,8 @@ class Game:
 
         self.lose_screen = LoseScreen(self.screen)
     
+        self.item_shop = ItemShop(self.screen, self.player)
+
     def run(self):
         while self.running:
             self.handle_events()
@@ -45,6 +48,8 @@ class Game:
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_l:  # Press 'L' key to simulate losing
                     self.transition_state(GameState.LOSE)
+                elif event.key == pygame.K_s:  # Press 'S' key to go to the shop
+                    self.transition_state(GameState.SHOP)
             if self.current_state == GameState.MENU:
                 self.menu.handle_events(events)
             elif self.current_state == GameState.MID_LEVEL:
@@ -53,6 +58,8 @@ class Game:
                 self.trivia_room_instance.handle_events(events)
             elif self.current_state == GameState.LOSE:
                 self.lose_screen.handle_event(event, self.transition_state)
+            elif self.current_state == GameState.SHOP:
+                self.item_shop.handle_event(event)
 
     def update(self):
         if self.current_state == GameState.MID_LEVEL:
@@ -60,7 +67,9 @@ class Game:
         elif self.current_state == GameState.TRIVIA_ROOM and self.trivia_room_instance:
             self.trivia_room_instance.update()
         elif self.current_state == GameState.LOSE:
-            pass  # Update logic for lose screen if needed
+            pass  
+        elif self.current_state == GameState.SHOP:
+            pass  
 
     def render(self):
         self.screen.fill((0, 0, 0))
@@ -75,7 +84,9 @@ class Game:
         elif self.current_state == GameState.LOSE:
             mouse_pos = pygame.mouse.get_pos()
             self.lose_screen.draw(mouse_pos)
-            
+        elif self.current_state == GameState.SHOP:
+            self.item_shop.draw() 
+
         if self.current_state in [GameState.MID_LEVEL, GameState.TRIVIA_ROOM]:
             self.hud.draw()
         pygame.display.flip()
@@ -96,7 +107,7 @@ class Game:
         if new_state == GameState.TRIVIA_ROOM:
             self.current_state = new_state
         # Load and play background music for the trivia room
-            pygame.mixer.music.load('assets\Music\trivia_room.mp3')
+            pygame.mixer.music.load('assets\Music\\trivia_room.mp3')
             pygame.mixer.music.play(-1)  # Loop the music
         elif new_state == GameState.MID_LEVEL:
             # Load and play background music for the mid-level
@@ -120,7 +131,9 @@ class Game:
         elif new_state == GameState.SHOPKEEPER:
             pygame.mixer.music.load('assets\Music\shop_menu.mp3')
             pygame.mixer.music.play(-1)
-        
+        elif new_state == GameState.SHOP:
+            pass
+
     def allow_redo(self):
         pass
     
