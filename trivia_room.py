@@ -149,15 +149,16 @@ class TriviaGame:
         feedback_text = "Correct!" if self.selection_result == 'correct' else "Incorrect..."
         feedback_color = (0, 255, 0) if self.selection_result == 'correct' else (255, 0, 0)
         feedback_surface = font.render(feedback_text, True, feedback_color)
-    
-        feedback_y_position = 200 
-    
+
+        feedback_y_position = 220  
+
         feedback_rect = feedback_surface.get_rect(center=(self.screen.get_width() / 2, feedback_y_position))
-    
-        bg_rect = feedback_rect.inflate(20, 10) 
-        pygame.draw.rect(self.screen, (0, 0, 0), bg_rect) 
+
+        bg_rect = feedback_rect.inflate(20, 10)  
+        pygame.draw.rect(self.screen, (0, 0, 0), bg_rect)  
         self.screen.blit(feedback_surface, feedback_rect)
         pygame.display.update()  
+
 
     def process_answer_selection(self, mouse_pos):
         font = pygame.font.Font(None, 36)
