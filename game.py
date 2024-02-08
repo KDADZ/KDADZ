@@ -50,6 +50,8 @@ class Game:
                     self.transition_state(GameState.LOSE)
                 elif event.key == pygame.K_s:  # Press 'S' key to go to the shop
                     self.transition_state(GameState.SHOP)
+                elif event.key == pygame.K_m:  # Press 'M' key to return to mid-level screen
+                    self.transition_state(GameState.MID_LEVEL)
             if self.current_state == GameState.MENU:
                 self.menu.handle_events(events)
             elif self.current_state == GameState.MID_LEVEL:
