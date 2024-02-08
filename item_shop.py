@@ -30,6 +30,7 @@ class ItemShop:
         if self.player.points >= item['cost']:
             self.player.points -= item['cost']  # Deducts the points
             item['cost'] += 100  # Increases item by 100 points
+            self.player.inventory.add_item(item_name, 1)  # Add the purchased item to the inventory
             print(f"Purchased {item_name}, new cost is {item['cost']} points") 
         else:
             print("Not enough points for this item")

@@ -53,6 +53,8 @@ class Game:
                     self.transition_state(GameState.SHOP)
                 elif event.key == pygame.K_m:  # Press 'M' key to return to mid-level screen
                     self.transition_state(GameState.MID_LEVEL)
+                elif event.key == pygame.K_i:  # 'i' key to open the inventory
+                    self.open_inventory()
             if self.current_state == GameState.MENU:
                 self.menu.handle_events(events)
             elif self.current_state == GameState.MID_LEVEL:
@@ -91,6 +93,8 @@ class Game:
             self.lose_screen.draw(mouse_pos)
         elif self.current_state == GameState.SHOP:
             self.item_shop.draw() 
+        elif self.current_state == GameState.INVENTORY:
+            self.player.inventory.draw(self.screen)
 
         if self.current_state in [GameState.MID_LEVEL, GameState.TRIVIA_ROOM]:
             self.hud.draw()
@@ -103,7 +107,14 @@ class Game:
             self.trivia_room_instance.load_new_question()
         self.transition_state(GameState.TRIVIA_ROOM)
 
-            
+    def open_inventory(self):
+        if self.current_state != GameState.INVENTORY:
+            self.previous_state = self.current_state  
+            self.current_state = GameState.INVENTORY  
+        else:
+            self.current_state = self.previous_state  
+
+
     def transition_state(self, new_state):
         self.current_state = new_state
 
