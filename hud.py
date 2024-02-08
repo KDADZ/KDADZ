@@ -15,14 +15,14 @@ class HUD:
         base_y = self.screen.get_height() - 37
         level_x = 200
 
-        money_text = f"Money: {self.game.player.money}"
-        self.draw_text(money_text, level_x, base_y)
+        points_text = f"Points: {self.game.player.points}"
+        self.draw_text(points_text, level_x, base_y)
 
         level_text = f"Level: {self.game.current_level}"
         self.draw_text(level_text, 10, base_y)
         
-        points_text = f"Points: {self.game.player.points}"
-        self.draw_text(points_text, 425, base_y)
+        # points_text = f"Points: {self.game.player.points}"
+        # self.draw_text(points_text, 425, base_y)
         
         
     def draw_hearts(self):
