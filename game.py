@@ -31,7 +31,7 @@ class Game:
 
         self.lose_screen = LoseScreen(self.screen)
     
-        self.item_shop = ItemShop(self.screen, self.player)
+        self.item_shop = ItemShop(self.screen, self.player, self)
 
         self.victory_screen = VictoryScreen(self)
 
@@ -61,6 +61,8 @@ class Game:
                     self.open_inventory()
                 elif event.key == pygame.K_v:  # 'v' key to open the victory screen
                     self.open_victory_screen()  # Corrected to call the right method
+                elif event.key == pygame.K_p: # 'p' to add points for testing
+                    self.player.add_points(500)
             if self.current_state == GameState.MENU:
                 self.menu.handle_events(events)
             elif self.current_state == GameState.MID_LEVEL:

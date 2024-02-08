@@ -2,9 +2,10 @@ import pygame
 from gamestate import GameState
 
 class ItemShop:
-    def __init__(self, screen, player):
+    def __init__(self, screen, player, game):
         self.screen = screen
         self.player = player
+        self.game = game
         self.font = pygame.font.SysFont('Arial', 24)
         self.background_img = pygame.image.load('assets/img/shopbackground.jpg').convert_alpha()
         self.items = {
@@ -62,7 +63,6 @@ class ItemShop:
                 if item_details['rect'].collidepoint(mouse_pos):
                     self.attempt_purchase(item_name)
 
-
     def attempt_purchase(self, item_name):
         item = self.items[item_name]
         if self.player.points >= item['cost']:
@@ -70,12 +70,14 @@ class ItemShop:
             item['cost'] += 100  # Increases item cost by 100 points
             self.player.inventory.add_item(item_name, 1)  # Add the purchased item to the inventory
             self.set_notification(f"Purchased {item_name}.")  # Notify purchase
+
+        # Check if the purchased item is the "Magic Sock"
+            if item_name == 'Magic Sock':
+            # Transition to the Victory screen
+                self.game.transition_state(GameState.VICTORY)
         else:
-            # Now the message includes the item's cost and description
             self.set_notification(f"You need {item['cost']} points for a {item_name}: {item['description']}")
 
-
-    
     def set_notification(self, message):
         self.notification_msg = message
         self.notification_time = pygame.time.get_ticks() / 1000  # Store the current time in seconds
