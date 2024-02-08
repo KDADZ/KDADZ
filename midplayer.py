@@ -11,26 +11,26 @@ class MidLevel:
         self.shop_portal_image = pygame.transform.scale(pygame.image.load('assets/img/portal2.png').convert_alpha(), (50, 50))
         self.stick_figure_image = pygame.transform.scale(pygame.image.load('assets/img/cropstickman.png').convert_alpha(), (50, 100))
         self.stickman_position = (self.screen.get_width() - self.stick_figure_image.get_width()) // 2
-        self.stickman_speed = 1
-        self.fast_speed = 1
+        self.stickman_speed = 2
+        self.fast_speed = 3
         self.is_left_held = False
         self.is_right_held = False
         self.font = pygame.font.Font(None, 36)
 
-    # def handle_events(self, events):
-    #     for event in events:
-    #         if event.type == pygame.KEYDOWN:
-    #             if event.key == pygame.K_LEFT:
-    #                 self.is_left_held = True
-    #             elif event.key == pygame.K_RIGHT:
-    #                 self.is_right_held = True
-    #         elif event.type == pygame.KEYUP:
-    #             if event.key == pygame.K_LEFT:
-    #                 self.is_left_held = False
-    #             elif event.key == pygame.K_RIGHT:
-    #                 self.is_right_held = False
-    
     def handle_events(self, events):
+        for event in events:
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_LEFT:
+                    self.is_left_held = True
+                elif event.key == pygame.K_RIGHT:
+                    self.is_right_held = True
+            elif event.type == pygame.KEYUP:
+                if event.key == pygame.K_LEFT:
+                    self.is_left_held = False
+                elif event.key == pygame.K_RIGHT:
+                    self.is_right_held = False
+    
+    # def handle_events(self, events):
         for event in events:
             if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:  # Left mouse button
                 mouse_pos = pygame.mouse.get_pos()
