@@ -8,12 +8,13 @@ from lose_screen import LoseScreen
 from hud import HUD
 from midplayer import MidLevel
 from item_shop import ItemShop
+from fade_out import fade_out
 
 class Game:
     def __init__(self):
         pygame.init()
         self.screen = pygame.display.set_mode((800, 600), pygame.DOUBLEBUF)
-        pygame.display.set_caption("Trivia Roguelite Game")
+        pygame.display.set_caption("Trivia Trek")
 
         self.clock = pygame.time.Clock()
         self.running = True
@@ -116,8 +117,8 @@ class Game:
 
 
     def transition_state(self, new_state):
+        fade_out(self.screen)
         self.current_state = new_state
-
         
         if new_state == GameState.TRIVIA_ROOM:
             self.current_state = new_state
