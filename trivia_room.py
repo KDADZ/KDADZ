@@ -61,7 +61,7 @@ class TriviaGame:
                 sys.exit()
             elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
                 self.process_answer_selection(event.pos)
-
+                
     def get_answer_boxes(self, font):
         screen_width = self.screen.get_width()
         answer_width_total = sum([font.size(f"{key.upper()}: {answer}")[0] for key, answer in self.answers.items()]) + (len(self.answers) - 1) * 20
