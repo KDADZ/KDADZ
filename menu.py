@@ -11,6 +11,8 @@ class Menu:
         self.screen = game.screen
         self.screen_width, self.screen_height = self.screen.get_size()
         self.current_state = 'main_menu'
+        pygame.mixer.music.load('assets\Music\main_menu.mp3')
+        pygame.mixer.music.play(-1)
         
         self.background_image = pygame.image.load('assets/img/background.jpg').convert_alpha()
         self.font = pygame.font.Font(None, 50)

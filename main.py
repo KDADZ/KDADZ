@@ -1,7 +1,9 @@
 from game import Game
+import pygame
 
 def main():
     
+    pygame.mixer.init()
     game = Game()
     game.run()
 
