@@ -12,7 +12,7 @@ from item_shop import ItemShop
 class Game:
     def __init__(self):
         pygame.init()
-        self.screen = pygame.display.set_mode((800, 600))
+        self.screen = pygame.display.set_mode((800, 600), pygame.DOUBLEBUF)
         pygame.display.set_caption("Trivia Roguelite Game")
 
         self.clock = pygame.time.Clock()
@@ -22,8 +22,8 @@ class Game:
         self.hud = HUD(self)
         self.mid_level = MidLevel(self)
 
-        self.player = Player(5, 100)  # Assuming Player initialization is correct
-        self.player.add_item(red_potion, 1)  # Ensure red_potion is correctly imported
+        self.player = Player(5, 100)
+        self.player.add_item(red_potion, 1)
         self.trivia_room_instance = None
         self.current_level = 1
 
@@ -36,6 +36,7 @@ class Game:
             self.handle_events()
             self.update()
             self.render()
+            pygame.display.flip()
             self.clock.tick(60)  # Cap the frame rate at 60 FPS
 
         pygame.quit()
@@ -64,7 +65,9 @@ class Game:
                 self.item_shop.handle_event(event)
 
     def update(self):
-        if self.current_state == GameState.MID_LEVEL:
+        if self.player.hp <= 0:
+            self.transition_state(GameState.LOSE)
+        elif self.current_state == GameState.MID_LEVEL:
             self.mid_level.update()
         elif self.current_state == GameState.TRIVIA_ROOM and self.trivia_room_instance:
             self.trivia_room_instance.update()
@@ -91,7 +94,6 @@ class Game:
 
         if self.current_state in [GameState.MID_LEVEL, GameState.TRIVIA_ROOM]:
             self.hud.draw()
-        pygame.display.flip()
         
     def trivia_room(self, selected_category):
         if self.trivia_room_instance is None:
@@ -104,7 +106,7 @@ class Game:
             
     def transition_state(self, new_state):
         self.current_state = new_state
-        pygame.mixer.music.stop()
+
         
         if new_state == GameState.TRIVIA_ROOM:
             self.current_state = new_state
@@ -118,6 +120,12 @@ class Game:
 
         elif new_state == GameState.MENU:
             # Load and play background music for the menu
+            self.player.hp = self.player.max_hp
+            self.player.money = 100  # Reset to initial money, adjust as needed
+            self.player.points = 0
+            # self.player.inventory.clear()
+            self.player.add_item(red_potion, 1)  # Give initial items back, adjust as needed
+            self.current_level = 1
             pygame.mixer.music.load('assets\Music\main_menu.mp3')
             pygame.mixer.music.play(-1)  # Loop the music
 
