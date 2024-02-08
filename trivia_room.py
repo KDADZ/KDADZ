@@ -66,7 +66,7 @@ class TriviaGame:
                 self.process_answer_selection(event.pos)
 
     def process_answer_selection(self, mouse_pos):
-        font = pygame.font.Font(None, 36)  # Match the font size with render_answers
+        font = pygame.font.Font(None, 24)  # Match the font size with render_answers
         answer_boxes = self.get_answer_boxes(font)
         for key, box in answer_boxes.items():
             if box.collidepoint(mouse_pos):
@@ -170,7 +170,6 @@ class TriviaGame:
         self.render_question(font)  # Draw the question with its background
         self.render_answers(font)  # Draw the answers horizontally at the bottom
 
-        pygame.display.flip()  # Update the display
         
     def update(self):
         pass
