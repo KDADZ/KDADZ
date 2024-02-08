@@ -4,7 +4,12 @@ class MidLevel:
     def __init__(self, game):
         self.game = game
         self.screen = game.screen
-        self.portal_categories = ['a) history', 'b) video games', 'c) sports', 'd) food']
+        self.portal_category_mapping = {
+            0: 'history',
+            1: 'video games',
+            2: 'sports',
+            3: 'food',
+        }
         self.background_image = pygame.transform.scale(pygame.image.load('assets/img/background.png').convert(), (1000, 800))
         self.portal_image = pygame.transform.scale(pygame.image.load('assets/img/portal1.png').convert_alpha(), (100, 100))
         self.portal_rect = self.portal_image.get_rect(center=(400, 300))
@@ -16,6 +21,9 @@ class MidLevel:
         self.is_left_held = False
         self.is_right_held = False
         self.font = pygame.font.Font(None, 36)
+        self.portal_size = 100  # Set the portal size (adjust as needed)
+        self.portal_spacing = 20  # Set the portal spacing (adjust as needed)
+        self.portal_start_x = self.portal_spacing  # Initialize portal start x position
 
     def handle_events(self, events):
         for event in events:
@@ -29,18 +37,18 @@ class MidLevel:
                     self.is_left_held = False
                 elif event.key == pygame.K_RIGHT:
                     self.is_right_held = False
-    
-    # def handle_events(self, events):
-        for event in events:
-            if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:  # Left mouse button
-                mouse_pos = pygame.mouse.get_pos()
-                if self.portal_rect.collidepoint(mouse_pos):
-                    self.on_portal_click()
-                    
-    def on_portal_click(self):
-        # Here, decide the category for the Trivia Room
-        selected_category = "history"  # Example category, change as needed
-        self.game.trivia_room(selected_category)
+            elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+                mouse_x, mouse_y = event.pos
+                for i in range(len(self.portal_category_mapping)):
+                    portal_x = self.portal_start_x + i * (self.portal_size + self.portal_spacing)
+                    portal_y = (self.screen.get_height() - self.portal_size) // 2
+                    portal_rect = pygame.Rect(portal_x, portal_y, self.portal_size, self.portal_size)
+
+                    if portal_rect.collidepoint(mouse_x, mouse_y):
+                        selected_category = self.portal_category_mapping[i]
+                        print(f"Selected category: {selected_category}")
+                        self.game.trivia_room(selected_category)
+                        return
         
     
 
@@ -54,7 +62,7 @@ class MidLevel:
 
     def draw(self):
         self.screen.blit(self.background_image, (0, 0))
-        num_portals = len(self.portal_categories)
+        num_portals = len(self.portal_category_mapping)
         portal_size = self.portal_image.get_size()[0]
         portal_spacing = (self.screen.get_width() - (num_portals * portal_size)) // (num_portals + 1)
         portal_start_x = portal_spacing
@@ -69,7 +77,7 @@ class MidLevel:
             # Check for collisions (optional logic here)
 
             # Draw category text below each portal
-            category_text = self.font.render(self.portal_categories[i], True, (255, 255, 255))
+            category_text = self.font.render(self.portal_category_mapping[i], True, (255, 255, 255))
             category_x = portal_x + (portal_size - category_text.get_width()) // 2
             category_y = portal_y + portal_size + 5
             self.screen.blit(category_text, (category_x, category_y))
@@ -77,5 +85,5 @@ class MidLevel:
         # Draw the stick figure
         stick_figure_y = portal_y - self.stick_figure_image.get_height() - 10
         self.screen.blit(self.stick_figure_image, (self.stickman_position, stick_figure_y))
-        self.screen.blit(self.portal_image, self.portal_rect.topleft)
+        # self.screen.blit(self.portal_image, self.portal_rect.topleft)
 
