@@ -79,7 +79,3 @@ class MidLevel:
         self.screen.blit(self.stick_figure_image, (self.stickman_position, stick_figure_y))
         self.screen.blit(self.portal_image, self.portal_rect.topleft)
 
-        # Draw shop portal and footer text
-        # (shop portal and footer text drawing code here)
-
-    # Additional methods for check_collisions, etc., can be added here

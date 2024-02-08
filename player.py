@@ -14,11 +14,14 @@ class Player(pygame.sprite.Sprite):
         self.image = pygame.image.load("assets\img\Stickman4.png").convert_alpha()
         self.rect = self.image.get_rect(topleft=position)
         
-        self.base_y = position[1]  # Base Y position for hover effect
-        self.hover_amplitude = 5  # How much the sprite moves up and down
-        self.hover_frequency = 2  # Speed of the hover effect
-        self.t = 0  # Time variable for the hover effect
+        self.base_y = position[1]  
+        self.hover_amplitude = 5  
+        self.hover_frequency = 2  
+        self.t = 0  
         self.hover_enabled = False
+
+        self.inventory = Inventory()
+        self.inventory.add_item('Health Potion', 1)  # Initialize with one health potion
 
 
     def add_money(self, amount):
