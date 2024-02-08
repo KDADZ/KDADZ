@@ -113,11 +113,23 @@ class Game:
             self.previous_state = self.current_state  
             self.current_state = GameState.INVENTORY  
         else:
-            self.current_state = self.previous_state  
+            self.current_state = self.previous_state
+            
+    def reset_game(self):
+            self.player.hp = self.player.max_hp
+            self.player.money = 100  # Reset to initial money, adjust as needed
+            self.player.points = 0
+            # self.player.inventory.clear()
+            self.player.add_item(red_potion, 1)  # Give initial items back, adjust as needed
+            self.current_level = 1
 
 
     def transition_state(self, new_state):
         fade_out(self.screen)
+        
+        if self.current_state == GameState.LOSE and new_state == GameState.MENU:
+            self.reset_game()
+            
         self.current_state = new_state
         
         if new_state == GameState.TRIVIA_ROOM:
@@ -132,19 +144,14 @@ class Game:
 
         elif new_state == GameState.MENU:
             # Load and play background music for the menu
-            self.player.hp = self.player.max_hp
-            self.player.money = 100  # Reset to initial money, adjust as needed
-            self.player.points = 0
-            # self.player.inventory.clear()
-            self.player.add_item(red_potion, 1)  # Give initial items back, adjust as needed
-            self.current_level = 1
+            self.reset_game()
             pygame.mixer.music.load('assets\Music\main_menu.mp3')
             pygame.mixer.music.play(-1)  # Loop the music
 
         elif new_state == GameState.LOSE:
             # Load and play background music for the lose screen
+            self.reset_game()
             pygame.mixer.music.load('assets\Music\lose_screen.mp3')
-            pygame.mixer.music.play(-1)  # Loop the music
 
         elif new_state == GameState.VICTORY:
             pygame.mixer.music.load('assets\Music\victory_screen.mp3')
