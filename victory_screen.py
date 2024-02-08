@@ -1,74 +1,32 @@
+# victory_screen.py
 import pygame
-import sys
 
-# Initialize Pygame
-pygame.init()
+class VictoryScreen:
+    def __init__(self, game):
+        self.game = game
+        self.screen = game.screen
+        self.background_image = pygame.image.load('assets/img/victory_screen.png').convert_alpha()
+        self.font_large = pygame.font.Font(None, 74)
+        self.font_small = pygame.font.Font(None, 36)
+        # Load other resources as needed
 
-# Screen dimensions
-screen_width = 800
-screen_height = 600
+    def draw(self):
+        # Blit the background image
+        self.screen.blit(self.background_image, (0, 0))
 
-# Create the window
-screen = pygame.display.set_mode((screen_width, screen_height))
-pygame.display.set_caption('Victory Screen')
+        # Congratulatory message
+        text_victory = self.font_large.render('Congratulations!', True, (255, 255, 255))
+        text_rect = text_victory.get_rect(center=(self.screen.get_width()//2, 50))
+        self.screen.blit(text_victory, text_rect)
 
-# Load background image
-background_image = pygame.image.load('assets/img/victory_screen.png')
+        # Score and statistics (Example)
+        text_score = self.font_small.render(f'Score: {self.game.player.points}', True, (255, 255, 255))
+        score_rect = text_score.get_rect(center=(self.screen.get_width()//2, 150))
+        self.screen.blit(text_score, score_rect)
+        # Add more statistics as needed
 
-# Load the additional image (make sure to provide the correct path to the image)
-additional_image_path = 'assets/img/Victory_sock.png'
-additional_image = pygame.image.load(additional_image_path)
-
-# Get the size of the image
-image_width, image_height = additional_image.get_size()
-
-# Calculate the new size to maintain aspect ratio and fit the screen height
-new_height = screen_height
-scale_factor = new_height / image_height
-new_width = int(image_width * scale_factor)
-
-# Resize the image
-additional_image_resized = pygame.transform.scale(additional_image, (new_width, new_height))
-
-# Calculate position to center the image
-image_x = (screen_width - new_width) // 2
-image_y = (screen_height - new_height) // 2
-
-# Define colors
-white = (255, 255, 255)
-
-# Set up fonts
-font_large = pygame.font.Font(None, 74)
-font_small = pygame.font.Font(None, 36)
-
-# Main loop
-running = True
-while running:
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            running = False
-
-    # Display the background
-    screen.blit(background_image, (0, 0))
-
-    # Display the resized additional image centered on the screen
-    screen.blit(additional_image_resized, (image_x, image_y))
-
-    # Congratulatory message
-    text_victory = font_large.render('Congratulations!', True, white)
-    screen.blit(text_victory, (200, 50))
-
-    # Score and statistics
-    text_score = font_small.render('Score: 12345', True, white)
-    screen.blit(text_score, (200, 150))
-    # Add more statistics as needed
-
-    # TODO: Add more features (achievements, leaderboards, etc.) here
-
-    # Update the display
-    pygame.display.flip()
-
-# Quit Pygame
-pygame.quit()
-sys.exit()
-
+    def handle_event(self, event):
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_ESCAPE:  # Example: Press ESC to return to menu
+                self.game.transition_state(GameState.MENU)
+        # Add more event handling if needed
