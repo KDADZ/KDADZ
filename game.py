@@ -9,6 +9,7 @@ from hud import HUD
 from midplayer import MidLevel
 from item_shop import ItemShop
 from fade_out import fade_out
+from victory_screen import VictoryScreen
 
 class Game:
     def __init__(self):
@@ -31,6 +32,8 @@ class Game:
         self.lose_screen = LoseScreen(self.screen)
     
         self.item_shop = ItemShop(self.screen, self.player)
+
+        self.victory_screen = VictoryScreen(self)
 
     def run(self):
         while self.running:
@@ -56,6 +59,8 @@ class Game:
                     self.transition_state(GameState.MID_LEVEL)
                 elif event.key == pygame.K_i:  # 'i' key to open the inventory
                     self.open_inventory()
+                elif event.key == pygame.K_v:  # 'v' key to open the victory screen
+                    self.open_victory_screen()  # Corrected to call the right method
             if self.current_state == GameState.MENU:
                 self.menu.handle_events(events)
             elif self.current_state == GameState.MID_LEVEL:
@@ -66,6 +71,8 @@ class Game:
                 self.lose_screen.handle_event(event, self.transition_state)
             elif self.current_state == GameState.SHOP:
                 self.item_shop.handle_event(event)
+            elif self.current_state == GameState.VICTORY:
+                self.victory_screen.handle_event(event)
 
     def update(self):
         if self.player.hp <= 0:
@@ -96,6 +103,8 @@ class Game:
             self.item_shop.draw() 
         elif self.current_state == GameState.INVENTORY:
             self.player.inventory.draw(self.screen)
+        elif self.current_state == GameState.VICTORY:
+            self.victory_screen.draw()
 
         if self.current_state in [GameState.MID_LEVEL, GameState.TRIVIA_ROOM]:
             self.hud.draw()
@@ -123,6 +132,8 @@ class Game:
             self.player.add_item(red_potion, 1)  # Give initial items back, adjust as needed
             self.current_level = 1
 
+    def open_victory_screen(self):
+        self.transition_state(GameState.VICTORY)
 
     def transition_state(self, new_state):
         fade_out(self.screen)
@@ -135,8 +146,8 @@ class Game:
         if new_state == GameState.TRIVIA_ROOM:
             self.current_state = new_state
         # Load and play background music for the trivia room
-            pygame.mixer.music.load('assets\Music\\trivia_room.mp3')
-            pygame.mixer.music.play(-1)  # Loop the music
+            # pygame.mixer.music.load('assets\Music\\trivia_room.mp3')
+            # pygame.mixer.music.play(-1)  # Loop the music
         elif new_state == GameState.MID_LEVEL:
             # Load and play background music for the mid-level
             pygame.mixer.music.load('assets\Music\Mid_Level.mp3')
@@ -154,8 +165,9 @@ class Game:
             pygame.mixer.music.load('assets\Music\lose_screen.mp3')
 
         elif new_state == GameState.VICTORY:
-            pygame.mixer.music.load('assets\Music\victory_screen.mp3')
-            pygame.mixer.music.play(-1)
+            # pygame.mixer.music.load('assets\Music\victory_screen.mp3')
+            # pygame.mixer.music.play(-1)
+            pass
             
         elif new_state == GameState.SHOPKEEPER:
             pygame.mixer.music.load('assets\Music\shop_menu.mp3')
