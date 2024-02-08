@@ -96,7 +96,7 @@ class Game:
         if new_state == GameState.TRIVIA_ROOM:
             self.current_state = new_state
         # Load and play background music for the trivia room
-            pygame.mixer.music.load('assets\Music\trivia_room.mp3')
+            pygame.mixer.music.load('assets\Music\\trivia_room.mp3')
             pygame.mixer.music.play(-1)  # Loop the music
         elif new_state == GameState.MID_LEVEL:
             # Load and play background music for the mid-level
