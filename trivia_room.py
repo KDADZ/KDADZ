@@ -73,7 +73,7 @@ class TriviaGame:
                 
     def get_answer_boxes(self, font):
         # Define positions for a 2x2 grid layout
-        positions = [(150, 400), (450, 400), (150, 500), (450, 500)]  # Adjust as needed
+        positions = [(135, 250), (445, 250), (135, 350), (445, 350)]  # Adjust as needed
         answer_boxes = {}
         for i, key in enumerate(sorted(self.answers.keys())):
             answer = self.answers[key]
@@ -162,6 +162,7 @@ class TriviaGame:
                     if self.game is not None:
                         self.question_count = 0
                         self.selection_result = None
+                        self.game.current_level += 1
                         self.game.transition_state(GameState.MID_LEVEL)
                     return
                 else:

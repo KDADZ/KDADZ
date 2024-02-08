@@ -21,6 +21,9 @@ class HUD:
         level_text = f"Level: {self.game.current_level}"
         self.draw_text(level_text, 10, base_y)
         
+        points_text = f"Points: {self.game.player.points}"
+        self.draw_text(points_text, 425, base_y)
+        
         
     def draw_hearts(self):
         max_health = self.game.player.max_hp
