@@ -13,6 +13,7 @@ class Player(pygame.sprite.Sprite):
         
         self.image = pygame.image.load("assets\img\Stickman4.png").convert_alpha()
         self.rect = self.image.get_rect(topleft=position)
+        self.drink = pygame.mixer.Sound("assets/sounds/consume_pot.wav")
         
         self.base_y = position[1]  
         self.hover_amplitude = 5  
@@ -77,3 +78,11 @@ class Player(pygame.sprite.Sprite):
             
     def toggle_hover(self):
         self.hover_enabled = not self.hover_enabled
+        
+    def use_health_potion(self):
+        if self.inventory.items.get('Health Potion', 0) > 0:
+            self.heal()  # Heal method to increase HP
+            self.inventory.remove_item('Health Potion', 1)  # Remove a potion from the inventory
+            print("Used a Health Potion")
+        else:
+            print("No Health Potions left")

@@ -6,8 +6,11 @@ class HUD:
         self.screen = game.screen
         self.hud_surface = pygame.Surface((self.game.screen.get_width(), 60))
         self.font = pygame.font.Font("protest.ttf", 32)
+        self.red_potion_image = pygame.image.load('assets/img/red_POT.png').convert_alpha()
+        self.red_potion_image = pygame.transform.scale(self.red_potion_image, (50, 60))
         self.heart_frames = [pygame.image.load(f'resized_frames/heart_frame_{i}.png').convert_alpha() for i in range(45)]
         self.empty_heart_image = pygame.image.load('resized_frames/empty_heart.png').convert_alpha()
+        self.e_key_box = pygame.Rect(0, 0, 40, 40)
         
     def draw(self):
         self.hud_surface.fill((0, 0, 0))
@@ -21,8 +24,28 @@ class HUD:
         level_text = f"Level: {self.game.current_level}"
         self.draw_text(level_text, 10, base_y)
         
-        # points_text = f"Points: {self.game.player.points}"
-        # self.draw_text(points_text, 425, base_y)
+        potion_y = self.screen.get_height() - 60
+        potion_count = self.game.player.inventory.items.get('Health Potion', 0)
+        potion_x = self.game.screen.get_width() - 90  # Adjust X to move the potion icon left or right
+        self.screen.blit(self.red_potion_image, (potion_x, potion_y))
+        self.draw_text(f"x{potion_count}", potion_x + 45, potion_y - 8)
+        
+        e_key_x = potion_x - 40
+        e_key_y = potion_y + 10
+        e_key_text = "E"
+        self.e_key_box = pygame.Rect(e_key_x - 10, e_key_y - 10, 40, 40)  # Adjust dimensions as needed
+
+        mouse_pos = pygame.mouse.get_pos()
+        self.is_hovering_e = self.e_key_box.collidepoint(mouse_pos)
+
+        box_color = (100, 100, 255) if self.is_hovering_e else (255, 255, 255)
+        pygame.draw.rect(self.screen, box_color, self.e_key_box, 0)  # Filled box
+        pygame.draw.rect(self.screen, (255, 255, 255), self.e_key_box, 2)  # Optional border
+
+        e_key_surface = self.font.render(e_key_text, True, (0, 0, 0))  # Black text for visibility
+        e_key_rect = e_key_surface.get_rect(center=(self.e_key_box.centerx, self.e_key_box.centery))
+        self.screen.blit(e_key_surface, e_key_rect.topleft)
+        
         
         
     def draw_hearts(self):
