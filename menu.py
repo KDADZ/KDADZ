@@ -11,7 +11,8 @@ class Menu:
         self.screen = game.screen
         self.screen_width, self.screen_height = self.screen.get_size()
         self.current_state = 'main_menu'
-        pygame.mixer.music.load('assets/Music/main_menu.mp3')
+        pygame.mixer.music.load('assets/Music/catch_the_starlight_8bit.mp3')
+        pygame.mixer.music.set_volume(0.1)
         pygame.mixer.music.play(-1)
         
         self.background_image = pygame.image.load('assets/img/background.jpg').convert_alpha()

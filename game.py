@@ -10,6 +10,7 @@ from midplayer import MidLevel
 from item_shop import ItemShop
 from fade_out import fade_out
 from victory_screen import VictoryScreen
+from creditscene import CreditsScene
 
 class Game:
     def __init__(self):
@@ -23,11 +24,14 @@ class Game:
         self.menu = Menu(self)
         self.hud = HUD(self)
         self.mid_level = MidLevel(self)
+        self.credits_scene = CreditsScene(self)
 
         self.player = Player(5, 100)
         self.player.add_item(red_potion, 1)
         self.trivia_room_instance = None
         self.current_level = 1
+        self.last_answer_time = 0
+        self.answer_debounce_period = 1000
 
         self.lose_screen = LoseScreen(self.screen)
     
@@ -46,6 +50,7 @@ class Game:
         pygame.quit()
 
     def handle_events(self):
+        current_time = pygame.time.get_ticks()
         events = pygame.event.get()
         mouse_pos = pygame.mouse.get_pos()
         for event in events:
@@ -54,6 +59,9 @@ class Game:
             elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:  # Check for left click
                 if self.hud.e_key_box.collidepoint(mouse_pos) and self.current_state in [GameState.MID_LEVEL, GameState.TRIVIA_ROOM]:
                     self.player.use_health_potion()
+                if current_time - self.last_answer_time > self.answer_debounce_period:
+                    # Your existing code to handle answer selection
+                    self.last_answer_time = current_time
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_l:  # Press 'L' key to simulate losing
                     self.transition_state(GameState.LOSE)
@@ -82,6 +90,8 @@ class Game:
                 self.item_shop.handle_event(event, self.transition_state)
             elif self.current_state == GameState.VICTORY:
                 self.victory_screen.handle_event(event)
+            elif self.current_state == GameState.CREDITS_SCENE:
+                self.credits_scene.handle_events(events)
 
     def update(self):
         if self.player.hp <= 0:
@@ -93,7 +103,9 @@ class Game:
         elif self.current_state == GameState.LOSE:
             pass  
         elif self.current_state == GameState.SHOP:
-            pass  
+            pass
+        elif self.current_state == GameState.CREDITS_SCENE:
+            self.credits_scene.update()
 
     def render(self):
         self.screen.fill((0, 0, 0))
@@ -114,6 +126,8 @@ class Game:
             self.player.inventory.draw(self.screen)
         elif self.current_state == GameState.VICTORY:
             self.victory_screen.draw()
+        elif self.current_state == GameState.CREDITS_SCENE:
+            self.credits_scene.render()
 
         if self.current_state in [GameState.MID_LEVEL, GameState.TRIVIA_ROOM]:
             self.hud.draw()
@@ -166,24 +180,27 @@ class Game:
         elif new_state == GameState.MENU:
             # Load and play background music for the menu
             self.reset_game()
-            pygame.mixer.music.load('assets\Music\main_menu.mp3')
+            pygame.mixer.music.load('assets\Music\catch_the_starlight_8bit.mp3')
             pygame.mixer.music.play(-1)  # Loop the music
 
         elif new_state == GameState.LOSE:
             # Load and play background music for the lose screen
             self.reset_game()
             pygame.mixer.music.load('assets\Music\lose_screen.mp3')
+            pygame.mixer.music.play()
 
         elif new_state == GameState.VICTORY:
-            # pygame.mixer.music.load('assets\Music\victory_screen.mp3')
-            # pygame.mixer.music.play(-1)
+            pygame.mixer.music.load('assets\Music\catch_the_starlight_8bit.mp3')
+            pygame.mixer.music.play(-1)
             pass
             
-        elif new_state == GameState.SHOPKEEPER:
+        elif new_state == GameState.CREDITS_SCENE:
+            pygame.mixer.music.load('assets\Music\pirateria.mp3')
+            pygame.mixer.music.play()
+        
+        elif new_state == GameState.SHOP:
             pygame.mixer.music.load('assets\Music\shop_menu.mp3')
             pygame.mixer.music.play(-1)
-        elif new_state == GameState.SHOP:
-            pass
 
     def allow_redo(self):
         pass

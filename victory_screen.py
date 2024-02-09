@@ -2,6 +2,7 @@
 import pygame
 import sys
 import random
+from gamestate import GameState
 
 class Particle:
     def __init__(self, x, y, radius, color, lifetime, x_vel, y_vel):
@@ -29,29 +30,46 @@ class VictoryScreen:
         self.game = game
         self.screen = game.screen
         try:
-            self.background_image = pygame.image.load('assets/img/VictoryFinal.png').convert_alpha()
-            self.background_image = pygame.transform.scale(self.background_image, (self.screen.get_width(), self.screen.get_height()))
+
+            self.background_image = pygame.image.load('assets/img/Victory_sock.png').convert_alpha()
+            self.bg_image_rect = self.background_image.get_rect(center=(self.screen.get_width() // 2, self.screen.get_height() // 2))
+            # Load and potentially resize the rain sock image
+            self.rain_sock_image = pygame.image.load('assets/img/Victory_rain_sock.png').convert_alpha()
+            self.rain_sock_image = pygame.transform.scale(self.rain_sock_image, (50, 50))  # Adjust size as needed
+
         except pygame.error as e:
             print(f"Failed to load the background image: {e}")
             sys.exit()
 
-        try:
-            self.rain_sock_image = pygame.image.load('assets/img/Victory_rain_sock.png').convert_alpha()
-            self.rain_sock_image = pygame.transform.scale(self.rain_sock_image, (50, 50))
-        except pygame.error as e:
-            print(f"Failed to load the rain sock image: {e}")
-
-        self.font_large = pygame.font.Font(None, 74)
-        self.font_small = pygame.font.Font(None, 36)
+        self.font_large = pygame.font.Font('protest.ttf', 74)
+        self.font_small = pygame.font.Font('protest.ttf', 50)
         self.gold = (255, 215, 0)
+        
+        # self.buttons = {
+        #     'Menu': {'rect': pygame.Rect(150, 300, 200, 50), 'action': self.go_to_menu, 'label': 'Menu'},
+        #     'Quit': {'rect': pygame.Rect(450, 300, 200, 50), 'action': self.quit_game, 'label': 'Quit'},
+        #     'Special': {'rect': pygame.Rect(300, 400, 200, 50), 'action': self.special_action, 'label': 'Special'}  # Placeholder for special action
+        # }
+        
+        self.buttons = {
+            'Menu': {'rect': pygame.Rect(150, 150, 200, 50), 'action': self.go_to_menu, 'label': 'Menu'},  # y changed from 300 to 250
+            'Quit': {'rect': pygame.Rect(450, 150, 200, 50), 'action': self.quit_game, 'label': 'Quit'},  # y changed from 300 to 250
+            'Special': {'rect': pygame.Rect(300, 225, 200, 50), 'action': self.special_action, 'label': 'Credits?'}  # y changed from 400 to 350
+        }
+        
+        # Initialize raining socks
+        self.raining_socks = self.init_raining_socks(30)  # Adjust the number of socks as needed
+        
+    def go_to_menu(self):
+        self.game.transition_state(GameState.MENU)
+        
+    def quit_game(self):
+        pygame.quit()
+        sys.exit()
+        
+    def special_action(self):
+        self.game.transition_state(GameState.CREDITS_SCENE)
 
-        self.raining_socks = self.init_raining_socks(30)
-        self.confetti = self.init_confetti(100)  # Number of confetti pieces
-
-        # Attributes for the descending thank you message
-        self.thank_you_message = "Thank You for Playing! Play Again Soon! Who On That Nag?"
-        self.thank_you_pos_y = -50  # Start off-screen
-        self.thank_you_target_y = 200  # Target y-coordinate
 
     def init_raining_socks(self, num_socks):
         socks = []
@@ -100,41 +118,29 @@ class VictoryScreen:
         text_rect = text_victory.get_rect(center=(self.screen.get_width() // 2, 50))
         self.screen.blit(text_victory, text_rect)
 
-        score_text = self.font_small.render(f'Score: {getattr(self.game.player, "score", "Infinity And Beyond")}', True, self.gold)
-        score_rect = score_text.get_rect(center=(self.screen.get_width() // 2, 100))
-        self.screen.blit(score_text, score_rect)
-
-        # Draw the thank you message
-        if self.thank_you_pos_y < self.thank_you_target_y:
-            self.thank_you_pos_y += 1
-        thank_you_text = self.font_small.render(self.thank_you_message, True, self.gold)
-        thank_you_rect = thank_you_text.get_rect(center=(self.screen.get_width() // 2, self.thank_you_pos_y))
-        self.screen.blit(thank_you_text, thank_you_rect)
+        score_text = f'Score: {self.game.player.money}'
+        text_score = self.font_small.render(score_text, True, self.gold)
+        score_rect = text_score.get_rect(center=(self.screen.get_width() // 2, 125))
+        self.screen.blit(text_score, score_rect)
+        
+        mouse_pos = pygame.mouse.get_pos()
+        for button_key, button_info in self.buttons.items():
+            fill_color = (0, 0, 0)  # Black color for button fill
+            border_color = (255, 255, 255) if button_info['rect'].collidepoint(mouse_pos) else (200, 200, 200)  # White when hovered, otherwise light gray
+            pygame.draw.rect(self.screen, fill_color, button_info['rect'])
+            text_surface = self.font_small.render(button_info['label'], True, border_color)  # Use border_color for text to match the border
+            text_rect = text_surface.get_rect(center=button_info['rect'].center)
+            self.screen.blit(text_surface, text_rect)
+        
 
     def handle_event(self, event):
-        if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
-            print("ESC pressed - Transitioning to another state not implemented.")
+        if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:  # Left click
+            mouse_pos = pygame.mouse.get_pos()
+            for button_key, button_info in self.buttons.items():
+                if button_info['rect'].collidepoint(mouse_pos):
+                    button_info['action']()
 
-def main():
-    pygame.init()
-    screen = pygame.display.set_mode((800, 600))
-    clock = pygame.time.Clock()
-    game = type('Game', (object,), {"screen": screen, "player": type('Player', (object,), {"score": 12345})()})()
-    victory_screen = VictoryScreen(game)
+        elif event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_ESCAPE:
+                self.go_to_menu()
 
-    running = True
-    while running:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                running = False
-            victory_screen.handle_event(event)
-
-        victory_screen.draw()
-        pygame.display.flip()
-        clock.tick(60)  # Cap the frame rate to 60 FPS
-
-    pygame.quit()
-    sys.exit()
-
-if __name__ == "__main__":
-    main()
