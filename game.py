@@ -47,9 +47,13 @@ class Game:
 
     def handle_events(self):
         events = pygame.event.get()
+        mouse_pos = pygame.mouse.get_pos()
         for event in events:
             if event.type == pygame.QUIT:
                 self.running = False
+            elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:  # Check for left click
+                if self.hud.e_key_box.collidepoint(mouse_pos) and self.current_state in [GameState.MID_LEVEL, GameState.TRIVIA_ROOM]:
+                    self.player.use_health_potion()
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_l:  # Press 'L' key to simulate losing
                     self.transition_state(GameState.LOSE)
@@ -59,10 +63,13 @@ class Game:
                     self.transition_state(GameState.MID_LEVEL)
                 elif event.key == pygame.K_i:  # 'i' key to open the inventory
                     self.open_inventory()
+                elif event.key == pygame.K_e:
+                    self.player.use_health_potion()
                 elif event.key == pygame.K_v:  # 'v' key to open the victory screen
                     self.open_victory_screen()  # Corrected to call the right method
                 elif event.key == pygame.K_p: # 'p' to add points for testing
                     self.player.add_points(500)
+
             if self.current_state == GameState.MENU:
                 self.menu.handle_events(events)
             elif self.current_state == GameState.MID_LEVEL:
