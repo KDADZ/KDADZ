@@ -3,6 +3,7 @@ import sys
 from OpenAI.Question_generator import generate_and_extract_trivia_details
 import random
 from gamestate import GameState
+import time
 
 class TriviaGame:
     def __init__(self, category, game=None, screen=None):
@@ -21,9 +22,14 @@ class TriviaGame:
         self.max_questions = 3
         self.hovered_answer = None
         self.selection_result = None
+        self.loading_new_question = False
+        self.cooldown_after_answer = False
+        self.time_answer_selected = 0
+        self.answer_display_duration = 1
         self.load_new_question()
 
     def load_new_question(self):
+        self.loading_new_question = True
         valid_question = False
         while not valid_question:
             trivia_object = generate_and_extract_trivia_details(self.category)
@@ -47,6 +53,7 @@ class TriviaGame:
 
             if self.current_question and len(all_answers) >= 4:
                 valid_question = True
+                self.loading_new_question = False
             else:
                 self.selection_result = None
 
@@ -69,17 +76,18 @@ class TriviaGame:
     def handle_events(self, events):
         mouse_pos = pygame.mouse.get_pos()
         self.hovered_answer = None
-        for event in events:
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                sys.exit()
-            elif event.type == pygame.MOUSEMOTION:
-                for key, box in self.get_answer_boxes(pygame.font.Font(None, 36)).items():
-                    if box.collidepoint(mouse_pos):
-                        self.hovered_answer = key
-                        break
-            elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
-                self.process_answer_selection(mouse_pos)
+        if not self.loading_new_question:
+            for event in events:
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    sys.exit()
+                elif event.type == pygame.MOUSEMOTION:
+                    for key, box in self.get_answer_boxes(pygame.font.Font(None, 36)).items():
+                        if box.collidepoint(mouse_pos):
+                            self.hovered_answer = key
+                            break
+                elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+                    self.process_answer_selection(mouse_pos)
                 
     def get_answer_boxes(self, font):
         positions = [(135, 250), (445, 250), (135, 350), (445, 350)]  
@@ -163,37 +171,41 @@ class TriviaGame:
     def process_answer_selection(self, mouse_pos):
         font = pygame.font.Font(None, 36)
         answer_boxes = self.get_answer_boxes(font)
-        for key, box in answer_boxes.items():
-            if box.collidepoint(mouse_pos):
-                if key == self.correct_answer:
-                    print("Correct answer selected!")
-                    self.selection_result = 'correct'
-                    self.correct_sound.play()
-                    self.points += 100
-                    self.game.player.add_points(self.points)
-                    self.game.player.add_money(int(self.points / 2))
+        if not self.cooldown_after_answer:
+            for key, box in answer_boxes.items():
+                if box.collidepoint(mouse_pos):
+                    if key == self.correct_answer:
+                        print("Correct answer selected!")
+                        self.selection_result = 'correct'
+                        self.correct_sound.play()
+                        self.points += 100 + (self.game.current_level * 25)
+                        self.game.player.add_points(self.points)
+                        self.game.player.add_money(self.points)
+                        self.points = 0
 
-                else:
-                    print("Incorrect answer selected!")
-                    self.selection_result = 'incorrect'
-                    self.incorrect_sound.play()
-                    self.game.player.take_damage(1)
+                    else:
+                        print("Incorrect answer selected!")
+                        self.selection_result = 'incorrect'
+                        self.incorrect_sound.play()
+                        self.game.player.take_damage(1)
 
-                self.render_feedback(font)
-                pygame.time.delay(2000)
+                    self.render_feedback(font)
+                    self.cooldown_after_answer = True
+                    self.time_answer_selected = time.time()
+                        
+                    self.question_count += 1
                     
-                self.question_count += 1
-                
-                if self.question_count >= self.max_questions:
-                    if self.game is not None:
-                        self.question_count = 0
+                    if self.question_count >= self.max_questions:
+                        if self.game is not None:
+                            self.question_count = 0
+                            self.selection_result = None
+                            self.game.current_level += 1
+                            pygame.time.delay(2000)
+                            self.game.transition_state(GameState.MID_LEVEL)
+                        return
+                    else:
+                        self.load_new_question()
                         self.selection_result = None
-                        self.game.current_level += 1
-                        self.game.transition_state(GameState.MID_LEVEL)
-                    return
-                else:
-                    self.load_new_question()
-                    self.selection_result = None
 
     def render(self):
         # Draw a semi-transparent overlay
@@ -208,4 +220,5 @@ class TriviaGame:
         self.render_answers(font)
 
     def update(self):
-        pass
+        if self.cooldown_after_answer and (time.time() - self.time_answer_selected > self.answer_display_duration):
+            self.cooldown_after_answer = False

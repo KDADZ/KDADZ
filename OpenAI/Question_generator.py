@@ -23,7 +23,7 @@ def generate_and_extract_trivia_details(category):
         for _ in range(max_attempts):
             try:
                 response = client.chat.completions.create(
-                    model="gpt-3.5-turbo",
+                    model="gpt-4-turbo-preview",
                     messages=[
                         {"role": "system", "content": "You are a helpful assistant."},
                         {"role": "user", "content": f"Generate a trivia question about {category} and return the question, the right answer, and three wrong answers. Ensure the wrong answers are formatted like this example: Wrong Answers: \n1. Chevrolet\n2. Toyota\n3. Honda. also, make sure the question asked does not match any in {last_five_questions}"}

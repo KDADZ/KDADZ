@@ -11,3 +11,4 @@ class GameState(enum.Enum):
     VICTORY = 7
     SHOP = 8
     INVENTORY = 9
+    CREDITS_SCENE = 10
