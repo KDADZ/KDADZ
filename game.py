@@ -54,7 +54,6 @@ class Game:
             elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:  # Check for left click
                 if self.hud.e_key_box.collidepoint(mouse_pos) and self.current_state in [GameState.MID_LEVEL, GameState.TRIVIA_ROOM]:
                     self.player.use_health_potion()
-                    self.player.drink.play()
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_l:  # Press 'L' key to simulate losing
                     self.transition_state(GameState.LOSE)
@@ -66,12 +65,8 @@ class Game:
                     self.open_inventory()
                 elif event.key == pygame.K_e:
                     self.player.use_health_potion()
-                    self.player.drink.play()
                 elif event.key == pygame.K_v:  # 'v' key to open the victory screen
                     self.open_victory_screen()  # Corrected to call the right method
-                elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:  # Left mouse click
-                    if self.hud.is_hovering_e:  # Use health potion with click on 'E' box
-                        self.player.use_health_potion()
                         
             if self.current_state == GameState.MENU:
                 self.menu.handle_events(events)

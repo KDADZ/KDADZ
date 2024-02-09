@@ -82,6 +82,7 @@ class Player(pygame.sprite.Sprite):
     def use_health_potion(self):
         if self.inventory.items.get('Health Potion', 0) > 0:
             self.heal()  # Heal method to increase HP
+            self.drink.play()
             self.inventory.remove_item('Health Potion', 1)  # Remove a potion from the inventory
             print("Used a Health Potion")
         else:
